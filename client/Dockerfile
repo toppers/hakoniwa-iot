@@ -17,3 +17,5 @@ RUN apt-get install -y curl
 
 RUN apt update
 RUN apt install -y mosquitto mosquitto-clients
+RUN pip3 install jwt
+
