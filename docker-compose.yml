@@ -1,0 +1,42 @@
+version: "3"
+services:
+
+  client:
+    restart: always
+    container_name: "client"
+    build: ./client
+    tty: true
+    environment:
+      - BROKER_IPADDR=192.168.11.4
+    networks:
+      base_network:
+        ipv4_address: 192.168.11.3
+#    command: tcpdump -i eth0 -X -s 0 -w /tmp/cap/client.pcap
+    working_dir: /root/workspace
+    volumes:
+      - ./cap/:/tmp/cap
+      - ./client/src/:/root/workspace/src
+      
+  server:
+    restart: always
+    build: ./server
+    container_name: "server"
+    tty: true
+    networks:
+      base_network:
+        ipv4_address: 192.168.11.4
+#   command: tcpdump -i eth0 -X -s 0 -w /tmp/cap/server.pcap
+    command: /usr/sbin/mosquitto
+    working_dir: /root/workspace
+    volumes:
+      - ./cap/:/tmp/cap
+      - ./server/src/:/root/workspace/src
+
+
+networks:
+  base_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.11.0/24
