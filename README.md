@@ -71,6 +71,30 @@ Stopping server ... done
 docker-compose exec server /bin/bash
 ```
 
+TLS通信でやりたい場合は，１回だけ，以下の操作を実行してください．
+
+```
+CURDIR=`pwd`
+```
+
+```
+cd config/tls
+```
+
+```
+bash ../tls_conf.bash
+```
+
+```
+cd ${CURDIR}
+```
+
+ご覧の通り，TLS向けの各種暗号化用のファイル群が作成されます．
+```
+# ls config/tls
+ca.crt  ca.key  ca.srl  client.crt  client.csr  client.key  server.crt  server.csr  server.key
+```
+
 サンプル用のMQTTサブスクライバを起動します．
 
 ```
