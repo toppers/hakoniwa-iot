@@ -77,6 +77,13 @@ docker-compose exec server /bin/bash
 bash src/sample_sub.bash
 ```
 
+なお，TLS通信でやる場合は，`tls`を付けてください
+
+```
+bash src/sample_sub.bash tls
+```
+
+
 成功するとこうなります．
 
 ```
@@ -96,14 +103,40 @@ docker-compose exec client /bin/bash
 ```
 
 サンプル用のMQTTトピックを送信します．
+ただし，トピック送信の仕方は２種類あります．
+
+1. mosquitto_pub コマンドで実行する方法
+2. python プログラムで実行する方法
+
+#### mosquitto_pub コマンドで実行する方法
 
 ```
 bash src/sample_pub.bash 'hello world'
 ```
 
+なお，TLS通信でやる場合は，`tls`を付けてください
+
+```
+bash src/sample_pub.bash 'hello world' tls
+```
+
+
+#### python プログラムで実行する方法
+
+```
+python3 src/sample_pub.py 
+```
+
+なお，TLS通信でやる場合は，`tls`を付けてください
+
+```
+python3 src/sample_pub.py tls
+```
+
+
 成功するとこうなります．
 
-#### クライアント側のログ
+##### クライアント側のログ(mosquitto_pub)
 
 ```
 Client mosq-QVrbCAEGBGqZ8MPUG8 sending CONNECT
@@ -111,6 +144,7 @@ Client mosq-QVrbCAEGBGqZ8MPUG8 received CONNACK (0)
 Client mosq-QVrbCAEGBGqZ8MPUG8 sending PUBLISH (d0, q0, r0, m1, 'topicA', ... (11 bytes))
 Client mosq-QVrbCAEGBGqZ8MPUG8 sending DISCONNECT
 ```
+
 
 #### サーバー側のログ
 
