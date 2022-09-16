@@ -13,9 +13,13 @@ import jwt
 import ssl
 
 server_ipaddr = "192.168.11.4"
-server_port = 1883
+MQTT_PORT = 1883
+MQTT_TLS_PORT = 8883
 topic_name = "topicA"
 
+tls_cacert = './config/tls/server.crt'
+tls_cert = './config/tls/client.crt'
+tls_key = './config/tls/client.key'
 
 def on_connect(unused_client, unused_userdata, unused_flags, rc):
     print("on_connect:", mqtt.connack_string(rc))
@@ -25,8 +29,21 @@ def on_disconnect(unused_client, unused_userdata, unused_flags, rc):
 
 
 
-def main():
+def main(is_tls):
     client = mqtt.Client()
+
+    server_port = MQTT_PORT
+    #TLS
+    if (is_tls):
+        server_port = MQTT_TLS_PORT
+        client.tls_set(
+            tls_cacert,
+            certfile = tls_cert,
+            keyfile = tls_key,
+            tls_version = ssl.PROTOCOL_TLSv1_2
+        )
+        client.tls_insecure_set(True)
+
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
 
@@ -55,4 +72,8 @@ def main():
         time.sleep(1)
 
 if __name__ == "__main__":
-    main()
+    is_tls = False
+    if (len(sys.argv) == 2):
+        is_tls = True
+    print("tls=" + str(is_tls))
+    main(is_tls)

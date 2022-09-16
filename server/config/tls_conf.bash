@@ -26,4 +26,4 @@ function generate_client () {
 
 generate_CA
 generate_server
-#generate_client
+generate_client
