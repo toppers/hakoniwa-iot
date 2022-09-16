@@ -16,6 +16,7 @@ services:
     volumes:
       - ./cap/:/tmp/cap
       - ./client/src/:/root/workspace/src
+      - ./server/config/:/root/workspace/config
       
   server:
     restart: always
@@ -26,11 +27,12 @@ services:
       base_network:
         ipv4_address: 192.168.11.4
 #   command: tcpdump -i eth0 -X -s 0 -w /tmp/cap/server.pcap
-    command: /usr/sbin/mosquitto
+#   command: /usr/sbin/mosquitto
     working_dir: /root/workspace
     volumes:
       - ./cap/:/tmp/cap
       - ./server/src/:/root/workspace/src
+      - ./server/config/:/root/workspace/config
 
 
 networks:
