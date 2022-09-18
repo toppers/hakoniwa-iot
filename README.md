@@ -4,6 +4,15 @@
 
 - docker-compose がインストーするされている環境
 
+## できること
+
+- デバイス側から、ダミーサーバーに対して、MQTTでデータ送信できます
+- TLS通信も手軽にできます
+- サーバーとの通信途絶などの異常系のテスト
+- デバイス側の通信データ量の計測(tcpdumpで手軽に見れます)
+- [bluepy.btle](https://github.com/IanHarvey/bluepy)を仮想化したデバイス[hakopy.btle](https://github.com/toppers/hakoniwa-iot/tree/main/client/src/stub/hakopy)を利用できます
+
+
 ## インストール方法
 
 ### git clone する
@@ -151,11 +160,15 @@ bash src/sample_pub.bash 'hello world' tls
 python3 src/sample_pub.py 
 ```
 
-なお，TLS通信でやる場合は，`tls`を付けてください
+TLS通信でやる場合は，`tls`を付けてください
 
 ```
 python3 src/sample_pub.py tls
 ```
+
+なお，pythonプログラムについては，[bluepy.btle](https://github.com/IanHarvey/bluepy)を仮想化したデバイス[hakopy.btle](https://github.com/toppers/hakoniwa-iot/tree/main/client/src/stub/hakopy)から取得したデータを送信します．
+
+送信対象データは，[こちらのテキストデータ](https://github.com/toppers/hakoniwa-iot/blob/main/client/src/stub/data/test_data.txt)の内容で，１行単位で取得されます．
 
 
 成功するとこうなります．
