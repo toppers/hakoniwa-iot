@@ -67,7 +67,8 @@ class MyDelegate(btle.DefaultDelegate):
         }
         self.data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
         self.data['count'] = self.count
-        message = json.dumps(data)
+        self.data['message'] = data
+        message = json.dumps(self.data)
         #print("message=", message)
 
         self.client.publish(topic_name, message, qos=1)
