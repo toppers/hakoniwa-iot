@@ -182,6 +182,6 @@ Client mosq-M4uLqJfOKmXvtFwieV received PINGRESP
 ```
 
 # 今後について
-- [ ] BLE スタブデバイスの追加
+- [x] BLE スタブデバイスの追加
 - [ ] GCPと同じような認証手順の追加
 - [ ] [サーバー側の箱庭環境RDBOX](https://github.com/fukuta-tatsuya-intec/rdbox_hakoniwa_iot)との結合
