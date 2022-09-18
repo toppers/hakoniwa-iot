@@ -12,6 +12,10 @@ import datetime
 import jwt
 import ssl
 
+from stub.hakopy import btle
+from stub.hakopy.btle import Peripheral
+import stub.hakopy.btle as btle
+
 server_ipaddr = "192.168.11.4"
 MQTT_PORT = 1883
 MQTT_TLS_PORT = 8883
@@ -28,48 +32,60 @@ def on_disconnect(unused_client, unused_userdata, unused_flags, rc):
     print("on_disconnect:", error_str(rc))
 
 
+class MySensor(Peripheral):
+    def __init__(self, addr, addrType):
+        Peripheral.__init__(self, addr, addrType)
+
+class MyDelegate(btle.DefaultDelegate):
+    def __init__(self, params):
+        btle.DefaultDelegate.__init__(self)
+        self.client = mqtt.Client()
+        self.server_port = MQTT_PORT
+        self.is_tls = params
+        #TLS
+        if (self.is_tls):
+            self.server_port = MQTT_TLS_PORT
+            self.client.tls_set(
+                tls_cacert,
+                certfile = tls_cert,
+                keyfile = tls_key,
+                tls_version = ssl.PROTOCOL_TLSv1_2
+            )
+            self.client.tls_insecure_set(True)
+
+        self.count = 0
+        self.client.on_connect = on_connect
+        self.client.on_disconnect = on_disconnect
+        self.client.connect(server_ipaddr, self.server_port)
+        self.client.loop_start()
+
+    def handleNotification(self, cHandle, data):
+        self.data = {
+            "timestamp": '',
+            "count": 0,
+            "message": "hello world!"
+        }
+        self.data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        self.data['count'] = self.count
+        message = json.dumps(data)
+        print("message=", message)
+
+        self.client.publish(topic_name, message, qos=1)
+        self.count = self.count + 1
 
 def main(is_tls):
-    client = mqtt.Client()
+    sensor = MySensor("dumy", "public")
+    sensor.setDelegate(MyDelegate(is_tls))
 
-    server_port = MQTT_PORT
-    #TLS
-    if (is_tls):
-        server_port = MQTT_TLS_PORT
-        client.tls_set(
-            tls_cacert,
-            certfile = tls_cert,
-            keyfile = tls_key,
-            tls_version = ssl.PROTOCOL_TLSv1_2
-        )
-        client.tls_insecure_set(True)
-
-    client.on_connect = on_connect
-    client.on_disconnect = on_disconnect
-
-    client.connect(server_ipaddr, server_port)
-    client.loop_start()
-
-    data = {
-        "timestamp": '',
-        "count": 0,
-        "message": "hello world!"
-    }
-    count = 0
     LoopFlag = True
     while LoopFlag:
         try:
-            data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-            data['count'] = count
-            message = json.dumps(data)
-            print("message=", message)
-
-            client.publish(topic_name, message, qos=1)
-            count = count + 1
+            if sensor.waitForNotifications(1.0):
+                print('handleNotification() was called')
+                continue
         except Exception as e:
             print("Other error occurs: {}".format(e))
             break
-        time.sleep(1)
 
 if __name__ == "__main__":
     is_tls = False
