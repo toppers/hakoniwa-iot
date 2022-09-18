@@ -55,14 +55,14 @@ class Peripheral:
         return None
 
     def readCharacteristic(self, handle):
-        return "dummy data"
+        return "Hello World!!"
 
     def writeCharacteristic(self, handle, val, withResponse=False, timeout=None):
         return 0
 
     def waitForNotifications(self, timeout):
         time.sleep(timeout)
-        self.delegate.handleNotification(0x00, "dummy data")
+        self.delegate.handleNotification(0x00, "Hello World!!")
 
     def __del__(self):
         self.disconnect()
