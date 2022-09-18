@@ -68,7 +68,7 @@ class MyDelegate(btle.DefaultDelegate):
         self.data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
         self.data['count'] = self.count
         message = json.dumps(data)
-        print("message=", message)
+        #print("message=", message)
 
         self.client.publish(topic_name, message, qos=1)
         self.count = self.count + 1
@@ -76,6 +76,7 @@ class MyDelegate(btle.DefaultDelegate):
 def main(is_tls):
     sensor = MySensor("dumy", "public")
     sensor.setDelegate(MyDelegate(is_tls))
+    sensor.setTestData('./src/stub/data/test_data.txt')
 
     LoopFlag = True
     while LoopFlag:

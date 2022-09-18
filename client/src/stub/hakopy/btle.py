@@ -62,7 +62,17 @@ class Peripheral:
 
     def waitForNotifications(self, timeout):
         time.sleep(timeout)
-        self.delegate.handleNotification(0x00, "Hello World!!")
+        test_data = self.test_data_file.readline()
+        if test_data == "":
+            self.delegate.handleNotification(0x00, "No Data")
+            return False
+        else:
+            self.delegate.handleNotification(0x00, test_data)
+            return True
 
     def __del__(self):
         self.disconnect()
+
+
+    def setTestData(self, filepath):
+        self.test_data_file = open(filepath)
