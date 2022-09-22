@@ -7,6 +7,7 @@
 ## できること
 
 - デバイス側から、ダミーサーバーに対して、MQTTでデータ送信できます
+- 過去に採取したIoTデバイスのデータをリプレイできます
 - TLS通信も手軽にできます
 - サーバーとの通信途絶などの異常系のテスト
 - デバイス側の通信データ量の計測(tcpdumpで手軽に見れます)
@@ -157,13 +158,13 @@ bash src/sample_pub.bash 'hello world' tls
 #### python プログラムで実行する方法
 
 ```
-python3 src/sample_pub.py 
+python3 src/sample_pub.py ./src/stub/data/sample-polar-data.csv
 ```
 
 TLS通信でやる場合は，`tls`を付けてください
 
 ```
-python3 src/sample_pub.py tls
+python3 src/sample_pub.py ./src/stub/data/sample-polar-data.csv tls
 ```
 
 なお，pythonプログラムについては，[bluepy.btle](https://github.com/IanHarvey/bluepy)を仮想化したデバイス[hakopy.btle](https://github.com/toppers/hakoniwa-iot/tree/main/client/src/stub/hakopy)から取得したデータを送信します．

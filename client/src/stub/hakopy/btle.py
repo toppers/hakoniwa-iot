@@ -21,6 +21,13 @@ class DefaultDelegate:
         pass
 
 
+class DataReader:
+    def __init__(self, filepath):
+        pass
+
+    def readData(self):
+        pass
+
 class Peripheral:
     def __init__(self, deviceAddr=None, addrType="public", iface=None, timeout=None):
         self.status = "disc"
@@ -62,7 +69,7 @@ class Peripheral:
 
     def waitForNotifications(self, timeout):
         time.sleep(timeout)
-        test_data = self.test_data_file.readline()
+        test_data = self.reader.readData()
         if test_data == "":
             self.delegate.handleNotification(0x00, "No Data")
             return False
@@ -74,5 +81,5 @@ class Peripheral:
         self.disconnect()
 
 
-    def setTestData(self, filepath):
-        self.test_data_file = open(filepath)
+    def setReader(self, reader):
+        self.reader = reader

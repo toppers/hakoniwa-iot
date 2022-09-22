@@ -15,6 +15,8 @@ import ssl
 from stub.hakopy import btle
 from stub.hakopy.btle import Peripheral
 import stub.hakopy.btle as btle
+import stub.hakopy.polar as polar
+from stub.hakopy.polar import PolarDataReader
 
 server_ipaddr = "192.168.11.4"
 MQTT_PORT = 1883
@@ -74,10 +76,13 @@ class MyDelegate(btle.DefaultDelegate):
         self.client.publish(topic_name, message, qos=1)
         self.count = self.count + 1
 
-def main(is_tls):
+def main(is_tls, reader):
     sensor = MySensor("dumy", "public")
     sensor.setDelegate(MyDelegate(is_tls))
-    sensor.setTestData('./src/stub/data/test_data.txt')
+
+    ####### stub code ###############
+    sensor.setReader(reader)
+    #################################
 
     LoopFlag = True
     while LoopFlag:
@@ -91,7 +96,14 @@ def main(is_tls):
 
 if __name__ == "__main__":
     is_tls = False
-    if (len(sys.argv) == 2):
+    if (len(sys.argv) == 3):
         is_tls = True
+    sample_data=sys.argv[1]
+    print("data=" + sample_data)
     print("tls=" + str(is_tls))
-    main(is_tls)
+
+    ####### stub code ###############
+    polar_reader = PolarDataReader(sample_data) 
+    #################################
+
+    main(is_tls, polar_reader)
