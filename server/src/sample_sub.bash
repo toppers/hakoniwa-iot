@@ -18,15 +18,23 @@ trap_sig INT TERM ERR EXIT PIPE
 
 echo "START"
 
+TOPIC_NAME=TopicA
+if [ -z $SUB_TOPIC_NAME ]
+then
+    :
+else
+    TOPIC_NAME=${SUB_TOPIC_NAME}
+fi
+
 if [ $# -eq 1 ]
 then
     mosquitto -c ./config/mosquitto.conf &
     sleep 3
-    mosquitto_sub -h 192.168.11.4 -t topicA  -p 8883 --cafile ./config/tls/server.crt &
+    mosquitto_sub -h 192.168.11.4 -t ${TOPIC_NAME}  -p 8883 --cafile ./config/tls/server.crt &
 else
     mosquitto &
     sleep 3
-    mosquitto_sub -h 192.168.11.4 -t topicA &
+    mosquitto_sub -h 192.168.11.4 -t ${TOPIC_NAME} &
 fi
 echo "OK"
 
