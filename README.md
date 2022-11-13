@@ -169,7 +169,7 @@ python3 src/sample_pub.py ./src/stub/data/sample-polar-data.csv tls
 
 なお，pythonプログラムについては，[bluepy.btle](https://github.com/IanHarvey/bluepy)を仮想化したデバイス[hakopy.btle](https://github.com/toppers/hakoniwa-iot/tree/main/client/src/stub/hakopy)から取得したデータを送信します．
 
-送信対象データは，[こちらのテキストデータ](https://github.com/toppers/hakoniwa-iot/blob/main/client/src/stub/data/test_data.txt)の内容で，１行単位で取得されます．
+送信対象データは，[こちらのテキストデータ](https://github.com/toppers/hakoniwa-iot/blob/main/client/src/stub/data/sample-polar-data.csv)の内容で，１行単位で取得されます．
 
 
 成功するとこうなります．
