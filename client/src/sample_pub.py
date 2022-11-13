@@ -63,15 +63,14 @@ class MyDelegate(btle.DefaultDelegate):
 
     def handleNotification(self, cHandle, data):
         self.data = {
-            "timestamp": '',
-            "count": 0,
-            "message": "hello world!"
+            "device_id": "xxxxx-0001",
+            "time": '',
+            "heart": "0"
         }
-        self.data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-        self.data['count'] = self.count
-        self.data['message'] = data
+        self.data['time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        self.data['heart'] = data
         message = json.dumps(self.data)
-        #print("message=", message)
+        print(topic_name + " : " + message)
 
         self.client.publish(topic_name, message, qos=1)
         self.count = self.count + 1
@@ -88,7 +87,7 @@ def main(is_tls, reader):
     while LoopFlag:
         try:
             if sensor.waitForNotifications(1.0):
-                print('handleNotification() was called')
+                #print('handleNotification() was called')
                 continue
         except Exception as e:
             print("Other error occurs: {}".format(e))
